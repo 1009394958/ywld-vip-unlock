@@ -1,26 +1,11 @@
-const url = $request.url;
-const body = $response.body;
-
+var body = $response.body;
 if (!body) {
   $done({});
-  return;
 }
-
-let obj;
-try {
-  obj = JSON.parse(body);
-} catch (e) {
-  $done({});
-  return;
+body = typeof body === "string" ? JSON.parse(body) : body;
+if (body.data && body.data.summary) {
+  body.data.summary.limit_score = 0;
+  body.data.summary.over_count = 999;
+  body.data.summary.total_count = 999;
 }
-
-// POST /api/product/yw/poem/summary
-if (url.includes('/api/product/yw/poem/summary') && obj.data) {
-  if (obj.data.summary) {
-    obj.data.summary.limit_score = 0;
-    obj.data.summary.over_count = 999;
-    obj.data.summary.total_count = 999;
-  }
-}
-
-$done({ body: JSON.stringify(obj) });
+$done({body: JSON.stringify(body)});
