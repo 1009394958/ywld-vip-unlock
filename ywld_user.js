@@ -1,4 +1,5 @@
-var obj = JSON.parse($response.body);
+var obj = $response.body;
+if (typeof obj === "string") obj = JSON.parse(obj);
 obj.data.is_vip = 1;
 obj.data.vip_expire_date = "2099-12-31";
 obj.data.vip_type = 2;
