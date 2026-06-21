@@ -1,8 +1,8 @@
-let body = $response.body;
-body = body.replace(/"is_vip":\d/g, '"is_vip":1');
-body = body.replace(/"vip_expire_date":"[^"]*"/g, '"vip_expire_date":"2099-12-31"');
-body = body.replace(/"vip_type":[^,}]*/g, '"vip_type":2');
-body = body.replace(/"is_paid":\d/g, '"is_paid":1');
-body = body.replace(/"has_ebook":\d/g, '"has_ebook":1');
-body = body.replace(/"nickname":"[^"]*"/g, '"nickname":"敖悦"');
-$done({body});
+var obj = JSON.parse($response.body);
+obj.data.is_vip = 1;
+obj.data.vip_expire_date = "2099-12-31";
+obj.data.vip_type = 2;
+obj.data.is_paid = 1;
+obj.data.has_ebook = 1;
+obj.data.nickname = "敖悦";
+$done({body: JSON.stringify(obj)});
