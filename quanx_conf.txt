@@ -1,0 +1,57 @@
+========================================
+  语文朗读宝 - Quantumult X 配置方法
+========================================
+
+一、将 ywld_vip.js 脚本文件放入 Quantumult X 的 Scripts 文件夹
+   (通常路径: iCloud Drive/Quantumult X/Scripts/)
+
+二、在 Quantumult X 的配置文件 [rewrite_local] 中添加以下规则：
+
+  # 用户信息接口 - 解锁VIP
+  ^https:\/\/api\.suyang123\.com\/api\/product\/user\/info\/for\/app url script-response-body ywld_vip.js
+
+  # 古诗学习概况 - 解锁学习限制
+  ^https:\/\/api\.suyang123\.com\/api\/product\/yw\/poem\/summary url script-response-body ywld_vip.js
+
+三、在 [mitm] 中添加域名：
+
+  hostname = api.suyang123.com
+
+四、开启 Quantumult X 的 MitM 和重写开关，即可生效。
+
+
+========================================
+  脚本修改的响应字段说明
+========================================
+
+修改的接口和字段：
+
+1. /api/product/user/info/for/app
+   ├── is_vip: 0 -> 1          (解锁VIP会员)
+   ├── vip_expire_date: -> 2099-12-31 (永久有效)
+   ├── vip_type: null -> 2     (高级VIP类型)
+   ├── is_paid: 0 -> 1         (标记已付费)
+   └── has_ebook: 0 -> 1       (解锁电子书权限)
+
+2. /api/product/yw/poem/summary
+   ├── limit_score: 90 -> 0    (移除分数限制)
+   ├── over_count: 0 -> 999    (完成数量)
+   └── total_count: 0 -> 999   (总数量)
+
+
+========================================
+  注意事项
+========================================
+
+1. 该脚本通过响应体修改（script-response-body）方式工作，
+   仅在数据到达应用前修改 JSON 字段，不涉及网络劫持。
+
+2. 章节列表等核心内容可能使用 AES 加密传输，
+   若响应的 sign 字段被客户端校验，可能影响部分功能。
+   如有问题，请反馈以便进一步逆向分析。
+
+3. 如果目标用户 VIP 已过期（is_vip=0），修改 is_vip=1
+   可以绕过客户端 VIP 检测。但如果服务端也做校验，
+   则需要更深入的分析。
+
+4. 使用前请确保 Quantumult X 已开启 MitM 并信任证书。
