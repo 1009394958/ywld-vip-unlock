@@ -1,4 +1,4 @@
-let obj = JSON.parse($response.body);
+let obj = JSON.parse(typeof $response.body === "string" ? $response.body : JSON.stringify($response.body));
 if (obj.data && obj.data.summary) {
   obj.data.summary.limit_score = 0;
   obj.data.summary.over_count = 999;
