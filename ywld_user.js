@@ -1,6 +1,7 @@
 var body = $response.body;
 if (!body) {
   $done({});
+  return;
 }
 body = typeof body === "string" ? JSON.parse(body) : body;
 if (body.data) {
