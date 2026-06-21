@@ -1,9 +1,12 @@
-// ==Cloak==
-// @name         语文朗读宝 VIP 解锁
-// @description  破解语文朗读宝VIP权限和到期时间
-// @version      1.0
-// @author       Trae
-// ==/Cloak==
+/*
+语文朗读宝 VIP 解锁 for Quantumult X
+=============================================
+【功能】
+  修改 /api/product/user/info/for/app 和 /api/product/yw/poem/summary 响应
+  将 is_vip 设为 1，vip_expire_date 设为 2099-12-31，解锁全部VIP权限
+【使用方式 - 重写订阅】
+  https://raw.githubusercontent.com/1009394958/ywld-vip-unlock/main/ywld_vip.conf
+*/
 
 const url = $request.url;
 const body = $response.body;
@@ -24,40 +27,30 @@ try {
 // ===================== 1. 用户信息接口 =====================
 // POST /api/product/user/info/for/app
 if (url.includes('/api/product/user/info/for/app') && obj.data) {
-  console.log('命中用户信息接口，开始修改VIP数据...');
-
   // 核心 VIP 字段
   if (obj.data.is_vip !== undefined) {
     obj.data.is_vip = 1;
     obj.data.vip_expire_date = '2099-12-31';
     obj.data.vip_type = 2;
   }
-
   // 付费相关
   if (obj.data.is_paid !== undefined) {
     obj.data.is_paid = 1;
     obj.data.has_ebook = 1;
   }
-
-  // 其他权限字段
+  // 其他权限
   if (obj.data.is_teacher !== undefined) obj.data.is_teacher = 0;
   if (obj.data.is_student !== undefined) obj.data.is_student = 0;
-
-  console.log('用户信息修改完成');
 }
 
 // ===================== 2. 古诗学习概况 =====================
 // POST /api/product/yw/poem/summary
 else if (url.includes('/api/product/yw/poem/summary') && obj.data) {
-  console.log('命中古诗概况接口，解锁学习限制...');
-
   if (obj.data.summary) {
     obj.data.summary.limit_score = 0;
     obj.data.summary.over_count = 999;
     obj.data.summary.total_count = 999;
   }
-
-  console.log('古诗概况修改完成');
 }
 
 // ===================== 3. 通用 =====================
