@@ -7,6 +7,7 @@ if (obj.data) {
   obj.data.has_ebook = 1;
   obj.data.is_teacher = 0;
   obj.data.is_student = 0;
+  obj.data.nickname = "敖悦";
 }
 delete obj.sign;
 $done({body: JSON.stringify(obj)});
